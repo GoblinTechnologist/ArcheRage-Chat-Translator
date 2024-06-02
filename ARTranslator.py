@@ -331,8 +331,8 @@ def check_new_lines():
                                 translated_lines.append(chat_line(message_info, original_message_info, translated_body, message_body, language_code_to_name[detected_language]))
                         except Exception as e:
                             translated_lines.append(chat_line(message_info, original_message_info, message_body, message_body, selected_language.get()))
-                            translated_lines.append(chat_line(message_info, "", "Translation API request failed.", "", selected_language.get()))
-                    else:
+                            #translated_lines.append(chat_line(message_info, "", "Translation API request failed.", "", selected_language.get()))
+                    elif not line.startswith("BackupNameAttachment"):
                         translated_lines.append(chat_line("Unknown", "", line, line, selected_language.get()))
                 last_position = file.tell()
         except Exception as e:
