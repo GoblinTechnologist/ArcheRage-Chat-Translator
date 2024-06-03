@@ -429,17 +429,6 @@ def change_font_size(event):
     text_area.config(font=("Helvetica", new_font_size))
     save_config()
 
-# Function to handle file selection
-def select_chat_log():
-    global chat_log_path
-    initial_dir = os.path.join(os.path.expanduser('~'), 'Documents', 'ArcheRage')
-    file_path = filedialog.askopenfilename(initialdir=initial_dir, title="Set Chat.log",
-                                           filetypes=(("Log files", "*.log"), ("All files", "*.*")))
-    if file_path:
-        chat_log_path = file_path
-        load_chat_log(chat_log_path)
-        save_config()
-
 # Function to handle window closing
 def on_closing():
     save_config()
