@@ -191,6 +191,7 @@ def load_config():
                 always_on_top_var.set(config.get('always_on_top', False))
                 timestamp_var.set(config.get('timestamp'))
                 original_var.set(config.get('show_original'))
+                max_lines_var.set(config.get('max_lines'))
                 window_width = config.get('window_width', 1024)
                 window_height = config.get('window_height', 768)
                 root.geometry(f'{window_width}x{window_height}')
@@ -229,6 +230,7 @@ def save_config():
         'timestamp': timestamp_var.get(),
         'show_original': original_var.get(),
         'font_size': int(font_size_combobox.get()),
+        'max_lines': max_lines_var.get(),
         'window_width': window_width,
         'window_height': window_height
     }
@@ -334,6 +336,8 @@ def check_new_lines():
                             #translated_lines.append(chat_line(message_info, "", "Translation API request failed.", "", selected_language.get()))
                     elif not line.startswith("BackupNameAttachment"):
                         translated_lines.append(chat_line("Unknown", "", line, line, selected_language.get()))
+                    if len(translated_lines) > max_lines_var.get() and max_lines_var.get() > 0:
+                        translated_lines.pop(0) 
                 last_position = file.tell()
         except Exception as e:
             print("Error", f"Failed to check new lines: {e}")
@@ -502,7 +506,6 @@ menu_frame = tk.Frame(options_frame, bg=dark_bg)
 menu_frame.pack(side=tk.TOP, fill=tk.X)
 
 # Drop-down menu for language selection
-#languages = ["English", "Polish", "Chinese", "Russian", "French", "Spanish", "Portuguese (Brazil)", "Turkish", "Ukrainian"]
 languages = [name for code, name in language_code_to_name.items()]
 selected_language = tk.StringVar()
 selected_language.set("English")  # Set default value
@@ -521,9 +524,6 @@ selected_language.trace_add('write', change_language)
 
 language_menu = ttk.Combobox(menu_frame, textvariable=selected_language, values=languages)
 language_menu.pack(side=tk.LEFT)
-#language_menu.config(bg=dark_bg, fg=dark_fg, highlightbackground="#333333")
-#menu = language_menu.nametowidget(language_menu.menuname)
-#menu.config(bg=dark_bg, fg=dark_fg)
 
 # Opacity slider
 opacity_label = tk.Label(menu_frame, text="Opacity:", bg=dark_bg, fg=dark_fg)
@@ -670,6 +670,29 @@ font_size_combobox.configure(style="TCombobox")
 # Bind the change_font_size function to the combobox selection event
 font_size_combobox.bind("<<ComboboxSelected>>", change_font_size)
 
+max_lines_var = tk.IntVar()
+max_lines_label = tk.Label(menu_frame, text="Max lines:\n(0 unlimited)", bg=dark_bg, fg=dark_fg)
+max_lines_label.pack(side=tk.LEFT)
+
+max_lines_spinbox = tk.Spinbox(menu_frame, textvariable=max_lines_var, increment=10, from_=0, to=200, width=3)
+max_lines_spinbox.pack(side=tk.LEFT)
+max_lines_spinbox.config(bg=dark_bg, fg=dark_fg, insertbackground=dark_fg, buttonbackground=dark_bg)
+
+# Bind the change_previous_lines function to the Spinbox value change event
+max_lines_spinbox.bind("<KeyRelease>", lambda e: validate_max_lines())
+
+def validate_max_lines():
+    # Get the current value
+    try:
+        value = max_lines_var.get()
+    except:
+        # If the value is not an integer, set it to 0
+        max_lines_var.set(0)
+        value = 0
+    # Validate the value
+    if value < 0:
+        max_lines_var.set(0)
+        
 # Disable text editing but allow copying
 text_area.bind("<KeyPress>", lambda e: "break")
 text_area.bind("<Key>", lambda e: "break")
