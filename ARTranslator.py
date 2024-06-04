@@ -340,9 +340,13 @@ def check_new_lines():
         except Exception as e:
             print("Error", f"Failed to check new lines: {e}")
     
-    while len(translated_lines) > max_lines_var.get() and max_lines_var.get() > 0:
-        translated_lines.pop(0)
-        displayed_line = max(displayed_line-1, 0)
+    max_lines = max_lines_var.get()
+    if max_lines > 0:
+        while int(text_area.index('end-1c').split('.')[0]) > max_lines:
+            self.delete("1.0", "2.0")
+        while len(translated_lines) > max_lines:
+            translated_lines.pop(0)
+            displayed_line = max(displayed_line-1, 0)
     
     for newtext in translated_lines[displayed_line:]:
         line_visibility, text_color = determine_display_line(newtext["channel"])
