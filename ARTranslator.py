@@ -336,11 +336,13 @@ def check_new_lines():
                             #translated_lines.append(chat_line(message_info, "", "Translation API request failed.", "", selected_language.get()))
                     elif not line.startswith("BackupNameAttachment"):
                         translated_lines.append(chat_line("Unknown", "", line, line, selected_language.get()))
-                    if len(translated_lines) > max_lines_var.get() and max_lines_var.get() > 0:
-                        translated_lines.pop(0) 
                 last_position = file.tell()
         except Exception as e:
             print("Error", f"Failed to check new lines: {e}")
+    
+    while len(translated_lines) > max_lines_var.get() and max_lines_var.get() > 0:
+        translated_lines.pop(0)
+        displayed_line = max(displayed_line-1, 0)
     
     for newtext in translated_lines[displayed_line:]:
         line_visibility, text_color = determine_display_line(newtext["channel"])
