@@ -343,7 +343,7 @@ def check_new_lines():
     max_lines = max_lines_var.get()
     if max_lines > 0:
         while int(text_area.index('end-1c').split('.')[0]) > max_lines:
-            self.delete("1.0", "2.0")
+            text_area.delete("1.0", "2.0")
         while len(translated_lines) > max_lines:
             translated_lines.pop(0)
             displayed_line = max(displayed_line-1, 0)
