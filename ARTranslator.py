@@ -27,8 +27,8 @@ color_mappings = {
 # Define patterns for replacement
 patterns = [
     (r'\|n(.+?)\|r', '{NAME}'),
-    (r'\|A(.+?)\;', '{INSTANCE}'),
-    (r'\|i(.+?)\;', '{LINK}')
+    (r'\|A(.+?)(;|$)', '{INSTANCE}'),
+    (r'\|i(.+?)(;|$)', '{LINK}')
 ]
 
 # Dictionary to map language codes to full language names
