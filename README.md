@@ -1,4 +1,4 @@
-This script requires the "requests" packag which can be installed with "python -m pip install requests"
+This script requires the "requests" package which can be installed with "python -m pip install requests"
 Alternatively, you can download the .exe that was generated with "pyinstaller --onefile --noconsole --icon=resources/translate.ico ARTranslator.py"
 
 To use the translator, launch the .exe or .py script from anywhere. Preferences are saved in a "config.txt" file in the same folder that the script is run from.
